@@ -143,6 +143,12 @@ class _HomeViewRefactoredState extends State<HomeViewRefactored> {
             setState(() {
               _currentIndex = index;
             });
+
+            // Navigate to profile screen when profile tab is clicked
+            if (index == 3) {
+              // Profile tab
+              Navigator.pushNamed(context, '/profile');
+            }
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -219,6 +225,12 @@ class _HomeViewRefactoredState extends State<HomeViewRefactored> {
             setState(() {
               _currentIndex = index;
             });
+
+            // Navigate to profile screen when profile tab is clicked
+            if (index == 3) {
+              // Profile tab
+              Navigator.pushNamed(context, '/profile');
+            }
           },
         ),
         floatingActionButton: FloatingActionButton(

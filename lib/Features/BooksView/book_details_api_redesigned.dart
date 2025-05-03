@@ -55,12 +55,21 @@ class BookDetailsApiRedesigned extends StatelessWidget {
                                           300,
                                         ),
                                         color: Colors.grey[300],
-                                        child: Icon(
-                                          Icons.book,
-                                          size: responsive.getResponsiveSize(
-                                            100,
-                                          ),
-                                          color: Colors.grey[600],
+                                        child: Image.network(
+                                          "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
+                                            return Icon(
+                                              Icons.image_not_supported,
+                                              size: responsive
+                                                  .getResponsiveSize(100),
+                                              color: Colors.grey[600],
+                                            );
+                                          },
                                         ),
                                       );
                                     },
@@ -69,10 +78,22 @@ class BookDetailsApiRedesigned extends StatelessWidget {
                                     width: responsive.getResponsiveSize(200),
                                     height: responsive.getResponsiveSize(300),
                                     color: Colors.grey[300],
-                                    child: Icon(
-                                      Icons.book,
-                                      size: responsive.getResponsiveSize(100),
-                                      color: Colors.grey[600],
+                                    child: Image.network(
+                                      "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return Icon(
+                                          Icons.image_not_supported,
+                                          size: responsive.getResponsiveSize(
+                                            100,
+                                          ),
+                                          color: Colors.grey[600],
+                                        );
+                                      },
                                     ),
                                   ),
                         ),
@@ -199,7 +220,12 @@ class BookDetailsApiRedesigned extends StatelessWidget {
                                           200,
                                         ),
                                         color: Colors.grey[300],
-                                        child: Icon(
+                                        child:
+                                        // Image.network(
+                                        //   fit: BoxFit.cover,
+                                        //   "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                        // ),
+                                        Icon(
                                           Icons.book,
                                           size: responsive.getResponsiveSize(
                                             50,
@@ -212,11 +238,26 @@ class BookDetailsApiRedesigned extends StatelessWidget {
                                   : Container(
                                     width: responsive.getResponsiveSize(150),
                                     height: responsive.getResponsiveSize(200),
-                                    color: Colors.grey[300],
-                                    child: Icon(
-                                      Icons.book,
-                                      size: responsive.getResponsiveSize(50),
-                                      color: Colors.grey[600],
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Image.network(
+                                      "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return Icon(
+                                          Icons.image_not_supported,
+                                          size: responsive.getResponsiveSize(
+                                            50,
+                                          ),
+                                          color: Colors.grey[600],
+                                        );
+                                      },
                                     ),
                                   ),
                         ),
@@ -427,7 +468,7 @@ class AboutBookSectionRedesigned extends StatelessWidget {
         ),
         SizedBox(height: responsive.getResponsiveSize(16)),
         Text(
-          'About',
+          'About The Book',
           style: rFonts.makeResponsive(
             GoogleFonts.hankenGrotesk(
               fontSize: 18,

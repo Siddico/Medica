@@ -6,6 +6,7 @@ import 'package:medical/Features/BooksView/books_view_api_redesigned.dart';
 import 'package:medical/Features/ForgetPasswordView/forget_password_view_enhanced.dart';
 import 'package:medical/Features/HomeView/home_view_refactored.dart';
 import 'package:medical/Features/LoginView/login_view_refactored.dart';
+import 'package:medical/Features/ProfileView/profile_view.dart';
 import 'package:medical/Features/SignupView/signup_view_refactored.dart';
 import 'package:medical/firebase_options.dart';
 
@@ -63,6 +64,7 @@ class Medica extends StatelessWidget {
         '/home': (context) => const HomeViewRefactored(),
         '/books': (context) => const BooksViewApiRedesigned(),
         '/forgot-password': (context) => const ForgetPasswordViewEnhanced(),
+        '/profile': (context) => const ProfileView(),
       },
     );
   }

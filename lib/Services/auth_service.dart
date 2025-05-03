@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:medical/Models/doctor.dart';
 import 'package:medical/Utils/session_manager.dart';
 
@@ -67,6 +67,7 @@ class AuthService {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       // Check if the email exists in Firestore
+      // ignore: unused_local_variable
       QuerySnapshot userDocs =
           await _firestore
               .collection('doctors')
@@ -96,8 +97,27 @@ class AuthService {
   // Confirm password reset with code from email
   Future<void> confirmPasswordReset(String code, String newPassword) async {
     try {
+      // First, get the email from the action code
+      String email = await _auth.verifyPasswordResetCode(code);
+
       // Use Firebase Auth to confirm the password reset
       await _auth.confirmPasswordReset(code: code, newPassword: newPassword);
+
+      // Find the user in Firestore by email
+      QuerySnapshot userDocs =
+          await _firestore
+              .collection('doctors')
+              .where('email', isEqualTo: email)
+              .limit(1)
+              .get();
+
+      // If the user exists in Firestore, update the passwordUpdatedAt field
+      if (userDocs.docs.isNotEmpty) {
+        String userId = userDocs.docs.first.id;
+        await _firestore.collection('doctors').doc(userId).update({
+          'passwordUpdatedAt': FieldValue.serverTimestamp(),
+        });
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw Exception('The password is too weak');
@@ -159,6 +179,61 @@ class AuthService {
       }
     } catch (e) {
       throw Exception('Failed to update password: ${e.toString()}');
+    }
+  }
+
+  // Get current user profile
+  Future<Doctor?> getCurrentUserProfile() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        return null;
+      }
+
+      // Get doctor details from Firestore
+      DocumentSnapshot doctorDoc =
+          await _firestore.collection('doctors').doc(user.uid).get();
+
+      if (doctorDoc.exists) {
+        Map<String, dynamic> data = doctorDoc.data() as Map<String, dynamic>;
+
+        // Create Doctor object from Firestore data
+        return Doctor(
+          fullName: data['fullName'] ?? '',
+          email: data['email'] ?? '',
+          specialization: data['specialization'] ?? '',
+          experience: data['experienceYears'] ?? '',
+          password: '', // We don't store or return the password
+        );
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to get user profile: ${e.toString()}');
+    }
+  }
+
+  // Update user profile
+  Future<void> updateUserProfile({
+    required String fullName,
+    required String specialization,
+    required String experienceYears,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw Exception('No user is currently logged in');
+      }
+
+      // Update doctor details in Firestore
+      await _firestore.collection('doctors').doc(user.uid).update({
+        'fullName': fullName,
+        'specialization': specialization,
+        'experienceYears': experienceYears,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Failed to update profile: ${e.toString()}');
     }
   }
 

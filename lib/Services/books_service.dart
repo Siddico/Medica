@@ -10,7 +10,7 @@ class BooksService {
     try {
       final response = await http.get(
         Uri.parse(
-          '$_baseUrl?Filtering=free-ebooks&q=subject:computer%20science&Sorting=newest&maxResults=$maxResults',
+          '$_baseUrl?Filtering=free-ebooks&q=subject:medical%20field&Sorting=newest&maxResults=$maxResults',
         ),
       );
 

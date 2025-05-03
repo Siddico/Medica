@@ -278,14 +278,24 @@ class _BooksViewApiRedesignedState extends State<BooksViewApiRedesigned> {
                         book.thumbnail,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return Icon(
+                          return
+                          // Image.network(
+                          //   fit: BoxFit.cover,
+                          //   "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                          // );
+                          Icon(
                             Icons.book,
                             size: responsive.getResponsiveSize(40),
                             color: Colors.grey[400],
                           );
                         },
                       )
-                      : Icon(
+                      :
+                      // Image.network(
+                      //   fit: BoxFit.cover,
+                      //   "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                      // ),
+                      Icon(
                         Icons.book,
                         size: responsive.getResponsiveSize(40),
                         color: Colors.grey[400],
@@ -492,7 +502,12 @@ class _BooksViewApiRedesignedState extends State<BooksViewApiRedesigned> {
                                   width: double.infinity,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Center(
-                                      child: Icon(
+                                      child:
+                                      // Image.network(
+                                      //   fit: BoxFit.cover,
+                                      //   "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                      // ),
+                                      Icon(
                                         Icons.book,
                                         size: responsive.getResponsiveSize(40),
                                         color: Colors.grey[400],
@@ -501,10 +516,16 @@ class _BooksViewApiRedesignedState extends State<BooksViewApiRedesigned> {
                                   },
                                 )
                                 : Center(
-                                  child: Icon(
-                                    Icons.book,
-                                    size: responsive.getResponsiveSize(40),
-                                    color: Colors.grey[400],
+                                  child: Image.network(
+                                    "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                        Icons.image_not_supported,
+                                        size: responsive.getResponsiveSize(40),
+                                        color: Colors.grey[400],
+                                      );
+                                    },
                                   ),
                                 ),
                       ),
@@ -637,16 +658,27 @@ class _BooksViewApiRedesignedState extends State<BooksViewApiRedesigned> {
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Center(
-                                  child: Icon(
-                                    Icons.book,
-                                    size: responsive.getResponsiveSize(24),
-                                    color: Colors.grey[400],
+                                  child: Image.network(
+                                    "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                        Icons.image_not_supported,
+                                        size: responsive.getResponsiveSize(24),
+                                        color: Colors.grey[400],
+                                      );
+                                    },
                                   ),
                                 );
                               },
                             )
                             : Center(
-                              child: Icon(
+                              child:
+                              // Image.network(
+                              //   fit: BoxFit.cover,
+                              //   "https://firebasestorage.googleapis.com/v0/b/b-s-n-u.appspot.com/o/usersProfileImages%2Fsiddidco.png?alt=media&token=e21694bd-4b8b-44c3-9e5b-f01d86705626",
+                              // ),
+                              Icon(
                                 Icons.book,
                                 size: responsive.getResponsiveSize(24),
                                 color: Colors.grey[400],
@@ -770,6 +802,7 @@ class _BooksViewApiRedesignedState extends State<BooksViewApiRedesigned> {
     );
   }
 
+  // ignore: unused_element
   void _navigateToPdfViewer(BuildContext context, Book book) {
     final pdfUrl = BooksService.getPdfUrlForBook(book);
     Navigator.push(
