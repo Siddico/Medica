@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "689237829129",
+    "project_id": "mr-hanafy-project",
+    "storage_bucket": "mr-hanafy-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689237829129:android:352528f2faced588a2bad8",
+        "android_client_info": {
+          "package_name": "com.example.medical"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrNQFEJSThROWIDnFZfplgYZcUcYVBxhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
