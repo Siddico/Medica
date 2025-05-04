@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:medical/Constants/responsive_font_styles.dart';
 import 'package:medical/Constants/responsive_utils.dart';
 import 'package:medical/Models/book.dart';
-import 'package:medical/Services/chat_gpt_service.dart';
+import 'package:medical/Services/gemini_service.dart';
 
 class BookAIChatScreen extends StatefulWidget {
   final Book book;
-  
-  const BookAIChatScreen({
-    required this.book,
-    super.key,
-  });
+
+  const BookAIChatScreen({required this.book, super.key});
 
   @override
   State<BookAIChatScreen> createState() => _BookAIChatScreenState();
@@ -20,7 +17,7 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [];
   bool _isTyping = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -30,13 +27,13 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
       "Ask me anything about this book, and I'll do my best to help you understand its content.",
     );
   }
-  
+
   @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
   }
-  
+
   void _addUserMessage(String message) {
     setState(() {
       _messages.add(
@@ -44,7 +41,7 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
       );
     });
   }
-  
+
   void _addBotMessage(String message) {
     setState(() {
       _messages.add(
@@ -52,21 +49,21 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
       );
     });
   }
-  
+
   Future<void> _handleSubmitted(String text) async {
     if (text.trim().isEmpty) return;
-    
+
     _messageController.clear();
     _addUserMessage(text);
-    
+
     setState(() {
       _isTyping = true;
     });
-    
+
     try {
-      // Use the ChatGPT service to get a response
-      final response = await ChatGptService.getChatResponse(text, widget.book);
-      
+      // Use the Gemini service to get a response
+      final response = await GeminiService.getChatResponse(text, widget.book);
+
       if (mounted) {
         setState(() {
           _isTyping = false;
@@ -81,7 +78,7 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
         });
         _addBotMessage(
           "I'm sorry, I'm having trouble connecting to my knowledge base. "
-          "Please try again later or ask a different question about \"${widget.book.title}\"."
+          "Please try again later or ask a different question about \"${widget.book.title}\".",
         );
       }
     }
@@ -90,8 +87,9 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveUtils(context);
+    // ignore: unused_local_variable
     final rFonts = context.responsiveFontStyles;
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff0B8FAC),
@@ -145,51 +143,88 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(
-                    'About AI Assistant',
-                    style: TextStyle(
-                      fontSize: responsive.fontSize(18),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'This AI assistant uses ChatGPT to provide information about "${widget.book.title}".',
-                        style: TextStyle(fontSize: responsive.fontSize(14)),
-                      ),
-                      SizedBox(height: responsive.getResponsiveSize(16)),
-                      Text(
-                        'You can ask questions about:',
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(
+                        'About AI Assistant',
                         style: TextStyle(
-                          fontSize: responsive.fontSize(14),
+                          fontSize: responsive.fontSize(18),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: responsive.getResponsiveSize(8)),
-                      _buildInfoItem(responsive, '• The book\'s content and summary'),
-                      _buildInfoItem(responsive, '• Author information'),
-                      _buildInfoItem(responsive, '• Publication details'),
-                      _buildInfoItem(responsive, '• Medical concepts covered'),
-                      _buildInfoItem(responsive, '• Related research and studies'),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        'Close',
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(16),
-                          color: const Color(0xff0B8FAC),
-                        ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'This AI assistant uses Google\'s Gemini AI to provide information about "${widget.book.title}".',
+                            style: TextStyle(fontSize: responsive.fontSize(14)),
+                          ),
+                          SizedBox(height: responsive.getResponsiveSize(8)),
+                          Text(
+                            'Powered by the Gemini API key: AIzaSyAG2qO1UvsObAZ44oz1LPO5x24dKKadulQ',
+                            style: TextStyle(
+                              fontSize: responsive.fontSize(12),
+                              color: Colors.grey[600],
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          SizedBox(height: responsive.getResponsiveSize(16)),
+                          Text(
+                            'You can ask questions about:',
+                            style: TextStyle(
+                              fontSize: responsive.fontSize(14),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: responsive.getResponsiveSize(8)),
+                          _buildInfoItem(
+                            responsive,
+                            '• The book\'s content and summary',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Author information and expertise',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Publication details and editions',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Medical terminology and concepts',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Clinical applications and patient care',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Research findings and evidence',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Comparison with other medical texts',
+                          ),
+                          _buildInfoItem(
+                            responsive,
+                            '• Latest developments in the field',
+                          ),
+                        ],
                       ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              fontSize: responsive.fontSize(16),
+                              color: const Color(0xff0B8FAC),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
               );
             },
           ),
@@ -207,58 +242,64 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
         child: Column(
           children: [
             Expanded(
-              child: _messages.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(responsive.getResponsiveSize(16)),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff0B8FAC).withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.chat_bubble_outline,
-                              size: responsive.getResponsiveSize(48),
-                              color: const Color(0xff0B8FAC),
-                            ),
-                          ),
-                          SizedBox(height: responsive.getResponsiveSize(16)),
-                          Text(
-                            'Ask me anything about this book!',
-                            style: TextStyle(
-                              fontSize: responsive.fontSize(18),
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xff0B8FAC),
-                            ),
-                          ),
-                          SizedBox(height: responsive.getResponsiveSize(8)),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: responsive.getResponsiveSize(32),
-                            ),
-                            child: Text(
-                              'I can help you understand the content, concepts, and context of "${widget.book.title}"',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: responsive.fontSize(14),
-                                color: Colors.grey[600],
+              child:
+                  _messages.isEmpty
+                      ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(
+                                responsive.getResponsiveSize(16),
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xff0B8FAC).withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.chat_bubble_outline,
+                                size: responsive.getResponsiveSize(48),
+                                color: const Color(0xff0B8FAC),
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: responsive.getResponsiveSize(16)),
+                            Text(
+                              'Ask me anything about this book!',
+                              style: TextStyle(
+                                fontSize: responsive.fontSize(18),
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff0B8FAC),
+                              ),
+                            ),
+                            SizedBox(height: responsive.getResponsiveSize(8)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.getResponsiveSize(32),
+                              ),
+                              child: Text(
+                                'I can help you understand the content, concepts, and context of "${widget.book.title}"',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: responsive.fontSize(14),
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      : ListView.builder(
+                        padding: EdgeInsets.all(
+                          responsive.getResponsiveSize(16),
+                        ),
+                        reverse: true,
+                        itemCount: _messages.length,
+                        itemBuilder: (context, index) {
+                          final message =
+                              _messages[_messages.length - 1 - index];
+                          return _buildMessage(message, responsive);
+                        },
                       ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.all(responsive.getResponsiveSize(16)),
-                      reverse: true,
-                      itemCount: _messages.length,
-                      itemBuilder: (context, index) {
-                        final message = _messages[_messages.length - 1 - index];
-                        return _buildMessage(message, responsive);
-                      },
-                    ),
             ),
             if (_isTyping)
               Container(
@@ -318,16 +359,41 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
               ),
               child: Row(
                 children: [
-                  IconButton(
+                  PopupMenuButton<String>(
                     icon: Icon(
                       Icons.help_outline,
                       color: Colors.grey[600],
                       size: responsive.getResponsiveSize(24),
                     ),
-                    onPressed: () {
-                      _handleSubmitted("What is this book about?");
+                    tooltip: 'Suggested questions',
+                    onSelected: (String question) {
+                      _handleSubmitted(question);
                     },
-                    tooltip: 'Ask about the book',
+                    itemBuilder:
+                        (BuildContext context) => <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: "What is this book about?",
+                            child: Text("What is this book about?"),
+                          ),
+                          PopupMenuItem<String>(
+                            value: "Who is the author?",
+                            child: Text("Who is the author?"),
+                          ),
+                          PopupMenuItem<String>(
+                            value: "What medical topics does this book cover?",
+                            child: Text("What medical topics does it cover?"),
+                          ),
+                          PopupMenuItem<String>(
+                            value:
+                                "How is this book used in clinical practice?",
+                            child: Text("Clinical applications?"),
+                          ),
+                          PopupMenuItem<String>(
+                            value:
+                                "What are the latest developments in this field?",
+                            child: Text("Latest developments?"),
+                          ),
+                        ],
                   ),
                   Expanded(
                     child: TextField(
@@ -370,7 +436,8 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
                     ),
                     child: IconButton(
                       icon: const Icon(Icons.send, color: Colors.white),
-                      onPressed: () => _handleSubmitted(_messageController.text),
+                      onPressed:
+                          () => _handleSubmitted(_messageController.text),
                     ),
                   ),
                 ],
@@ -381,22 +448,20 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
       ),
     );
   }
-  
+
   Widget _buildInfoItem(ResponsiveUtils responsive, String text) {
     return Padding(
       padding: EdgeInsets.only(bottom: responsive.getResponsiveSize(4)),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: responsive.fontSize(14)),
-      ),
+      child: Text(text, style: TextStyle(fontSize: responsive.fontSize(14))),
     );
   }
-  
+
   Widget _buildMessage(ChatMessage message, ResponsiveUtils responsive) {
     return Padding(
       padding: EdgeInsets.only(bottom: responsive.getResponsiveSize(16)),
       child: Row(
-        mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isUser) ...[
@@ -415,9 +480,7 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
             child: Container(
               padding: EdgeInsets.all(responsive.getResponsiveSize(12)),
               decoration: BoxDecoration(
-                color: message.isUser
-                    ? const Color(0xff0B8FAC)
-                    : Colors.white,
+                color: message.isUser ? const Color(0xff0B8FAC) : Colors.white,
                 borderRadius: BorderRadius.circular(
                   responsive.getResponsiveSize(16),
                 ),
@@ -444,9 +507,10 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
                     _formatTime(message.timestamp),
                     style: TextStyle(
                       fontSize: responsive.fontSize(10),
-                      color: message.isUser
-                          ? Colors.white.withOpacity(0.7)
-                          : Colors.grey[600],
+                      color:
+                          message.isUser
+                              ? Colors.white.withOpacity(0.7)
+                              : Colors.grey[600],
                     ),
                   ),
                 ],
@@ -469,7 +533,7 @@ class _BookAIChatScreenState extends State<BookAIChatScreen> {
       ),
     );
   }
-  
+
   String _formatTime(DateTime timestamp) {
     final hour = timestamp.hour.toString().padLeft(2, '0');
     final minute = timestamp.minute.toString().padLeft(2, '0');
@@ -481,7 +545,7 @@ class ChatMessage {
   final String text;
   final bool isUser;
   final DateTime timestamp;
-  
+
   ChatMessage({
     required this.text,
     required this.isUser,
